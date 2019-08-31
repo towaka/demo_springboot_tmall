@@ -1,0 +1,22 @@
+本项目涉及到的RESTFUL 标准
+
+1. 资源名称用复数，而非单数。
+例1: 面对Category类数据，uri使用 /categories 而不是用 /category
+
+2. CRUD 分别对应：
+增加： post
+删除： delete
+修改： put
+查询： get
+
+3. id 参数的传递都用 /id方式。
+如编辑和修改：
+/categories/123
+
+4. 其他参数采用?name=value的形式
+如分页参数 /categories?start=5
+
+5. 返回数据
+查询多个返回 json 数组
+增加，查询一个，修改 都返回当前 json 数组
+删除 返回空

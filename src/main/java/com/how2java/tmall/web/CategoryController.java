@@ -31,7 +31,7 @@ public class CategoryController {
     @GetMapping("/categories")
     public Page4Navigator<Category> list(@RequestParam(value = "start", defaultValue = "0") int start,
                                          @RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
-        start = start<0?0:start;
+        start = start<0?0:start;//先确定start是否小于0，别的再说
         Page4Navigator<Category> page =categoryService.list(start, size, 5);  //5表示导航分页最多有5个，像 [1,2,3,4,5] 这样
         return page;
     }
@@ -91,5 +91,45 @@ public class CategoryController {
         image.transferTo(file);
         BufferedImage img = ImageUtil.change2jpg(file);
         ImageIO.write(img, "jpg", file);
+    }
+
+    /**
+     * 把id对应的持久化对象取出来，并转换为json对象发给浏览器
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/categories/{id}")
+    public Category get(@PathVariable("id") int id) throws Exception {
+        Category bean=categoryService.get(id);
+        return bean;
+    }
+
+    /**
+     * 使用put方式上传。
+     * 按照 REST规范，增加是 POST，修改是 PUT。
+     * @param bean
+     * @param image
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @PutMapping("/categories/{id}")
+    public Object update(Category bean, MultipartFile image,HttpServletRequest request) throws Exception {
+        /**
+         * 为什么update时，分类名称需要在后台setName（name），而add方法时不需要。
+         * @see CategoryController#add(Category, MultipartFile, HttpServletRequest) <---请看add方法
+         *
+         * 因为修改和增加都会做上传行为， 而上传行为使用的是 axios的 formData 这种形式做的。
+         * add是 post, update 是 put.  post和put 在获取参数的时候，不一样，所以只能做成当前的形式了。
+         */
+        String name = request.getParameter("name");
+        bean.setName(name);
+        categoryService.update(bean);
+
+        if(image!=null) {
+            saveOrUpdateImageFile(bean, image, request);
+        }
+        return bean;
     }
 }
