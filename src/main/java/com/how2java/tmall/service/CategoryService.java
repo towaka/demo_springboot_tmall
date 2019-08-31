@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 这里抛弃了 CategoryService 接口 加上 CategoryServiceImpl 实现类的这种累赘的写法，
+ * 这里抛弃了 XxxService 接口 加上 XxxServiceImpl 实现类的这种累赘的写法，
  * 而是直接使用 CategoryService 作为实现类来做
  */
 @Service

@@ -131,5 +131,6 @@ public class CategoryController {
             saveOrUpdateImageFile(bean, image, request);
         }
         return bean;
+
     }
 }

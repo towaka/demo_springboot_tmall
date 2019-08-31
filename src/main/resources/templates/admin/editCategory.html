@@ -22,7 +22,6 @@
             },
 
             methods: {
-
                 /**
                  * get 函数里面， this.uri 可以取到  uri 的值， 也就是 'categories'。
                  * 但是为什么 bean 的值需要用 vue.bean 来取呢？
@@ -37,6 +36,7 @@
                  * axios.get(url).then(function(response) {
                  * this
                  * })
+                 *
                  */
                 get:function(){
                     var id = getUrlParms("id");
