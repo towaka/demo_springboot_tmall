@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * 后台页面跳转都放在 AdminPageController 这个控制器里
+ * 后台页面跳转
  */
 @Controller
 public class AdminPageController {
@@ -13,12 +13,39 @@ public class AdminPageController {
     public String admin(){
         return "redirect:admin_category_list";
     }
+
     @GetMapping(value="/admin_category_list")
     public String listCategory(){
         return "admin/listCategory";
     }
+
     @GetMapping(value = "admin_category_edit")
     public String editCategory(){
         return "admin/editCategory";
+    }
+
+    @GetMapping(value="/admin_property_list")
+    public String listProperty(){
+        return "admin/listProperty";
+    }
+
+    @GetMapping(value="/admin_property_edit")
+    public String editProperty(){
+        return "admin/editProperty";
+    }
+
+    @GetMapping(value="/admin_product_list")
+    public String listProduct(){
+        return "admin/listProduct";
+    }
+
+    @GetMapping(value="/admin_product_edit")
+    public String editProduct(){
+        return "admin/editProduct";
+    }
+
+    @GetMapping(value="/admin_productImage_list")
+    public String listProductImage(){
+        return "admin/listProductImage";
     }
 }

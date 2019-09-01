@@ -9,6 +9,7 @@ import java.sql.Statement;
 
 /**
  * 使用JUNIT测试方法
+ * 使用过程中，方法不能被声明为static，也不能有方法参数
  */
 public class TestTmall {
     @Test
