@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * 在SSM环境下建立增删改查功能，可以在XML文件写上SQL语句
  * 而在springboot环境下则不然
@@ -27,4 +29,12 @@ public interface PropertyDAO extends JpaRepository<Property,Integer>{
      * @return
      */
     Page<Property> findByCategory(Category category, Pageable pageable);
+
+    /**
+     * 通过分类获取所有属性集合的方法
+     * 这是不需要分页的前提下需要的遍历属性的方法
+     * @param category
+     * @return
+     */
+    List<Property> findByCategory(Category category);
 }
