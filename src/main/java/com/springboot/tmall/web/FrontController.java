@@ -26,7 +26,7 @@ public class FrontController {
         List<Category> cs= categoryService.list();
         productService.fill(cs);
         productService.fillByRow(cs);
-        //categoryService.removeCategoryFromProduct(cs);
+        categoryService.removeCategoryFromProduct(cs);
         return cs;
     }   
 }

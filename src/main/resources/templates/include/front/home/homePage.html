@@ -1,11 +1,13 @@
 <div th:fragment="html">
     <script>
+        //显示产品列表函数
         function showProductsAsideCategorys(cid){
             $("div.eachCategory[cid="+cid+"]").css("background-color","white");
             $("div.eachCategory[cid="+cid+"] a").css("color","#87CEFA");
             $("div.productsAsideCategorys[cid="+cid+"]").show();
         }
 
+        //隐藏产品列表函数
         function hideProductsAsideCategorys(cid){
             $("div.eachCategory[cid="+cid+"]").css("background-color","#e2e2e3");
             $("div.eachCategory[cid="+cid+"] a").css("color","#000");
@@ -57,20 +59,25 @@
         }
 
         $(function(){
-
             var data4Vue = {
-                uri:'forehome',
+                uri:'fronthome',
                 categories: []
             };
-            //ViewModel
+            //加载Vue
             var vue = new Vue({
                 el: '#workingArea',
                 data: data4Vue,
-                mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+                mounted:function(){
+                    //Vue加载成功之后调用 header.html的linkDefaultActions函数，给一些特定超链加上事件。
                     linkDefaultActions();
+                    //调用load函数刷新
                     this.load();
                 },
                 methods: {
+                    //在load函数中访问 forehome
+                    //vue.$nextTick 的意思是表示渲染结束后，会被调用，相当于回调函数的概念。
+                    // 为什么要这么做呢？ 因为要等渲染结束之后，才来进行监听，否则他们都没有被创建出来，监听也没有意义。
+
                     load:function(){
                         var url =  this.uri;
                         axios.get(url).then(function(response) {
@@ -96,7 +103,7 @@
 
     <title>模仿天猫官网</title>
     <div class="homepageDiv">
-        <div th:replace="include/fore/home/categoryAndcarousel::html" ></div>
-        <div th:replace="include/fore/home/homepageCategoryProducts::html" ></div>
+        <div th:replace="include/front/home/categoryAndcarousel::html" ></div>
+        <div th:replace="include/front/home/homepageCategoryProducts::html" ></div>
     </div>
 </div>

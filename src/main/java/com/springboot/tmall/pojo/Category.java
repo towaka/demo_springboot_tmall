@@ -28,12 +28,14 @@ public class Category {
     public void setId(int id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
     }
+
     public List<Product> getProducts() {
         return products;
     }
@@ -45,5 +47,9 @@ public class Category {
     }
     public void setProductsByRow(List<List<Product>> productsByRow) {
         this.productsByRow = productsByRow;
+    }
+    @Override
+    public String toString() {
+        return "Category [id=" + id + ", name=" + name + "]";
     }
 }
