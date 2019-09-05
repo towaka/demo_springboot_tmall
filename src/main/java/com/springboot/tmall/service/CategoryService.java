@@ -53,6 +53,11 @@ public class CategoryService {
         categoryDAO.save(bean);
     }
 
+    /**
+     * 以下两个方法必须要加
+     * 如果不加就会产生无限递归问题（Infinite Recursion）
+     */
+
     public void removeCategoryFromProduct(Category category) {
         List<Product> products =category.getProducts();
         if(null!=products) {
