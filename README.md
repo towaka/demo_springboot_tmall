@@ -7,9 +7,14 @@ demo_springboot_tmall
 项目涉及9张表<br>
 ![](https://github.com/towaka/demo_springboot_tmall/blob/master/tables.png)<br>
 <br><br><br>
-表和表之间的关系<br>
+表和表之间的关系（绘图工具：https://www.processon.com ）<br>
 ![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E8%A1%A8%E5%85%B3%E7%B3%BB.png)<br>
 <br><br><br>
+
+每个表的用途<br>
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E8%A1%A8%E7%94%A8%E9%80%94.png)<br>
+<br><br><br>
+
 
 
 
