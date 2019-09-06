@@ -4,7 +4,9 @@ demo_springboot_tmall
 
 整个过程持续了几个月时间，之前一直都只在本地测试，前端是较大难点，一边做一边学习<br>
 项目涉及9张表<br>
-![](https://github.com/towaka/demo_springboot_tmall/blob/master/tables.png)
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/tables.png)<br>
+表和表之间的关系<br>
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E8%A1%A8%E5%85%B3%E7%B3%BB.png)<br>
 
 
 
