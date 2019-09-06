@@ -4,6 +4,7 @@ demo_springboot_tmall
 
 整个过程持续了几个月时间，之前一直都只在本地测试，前端是较大难点，一边做一边学习<br>
 项目涉及9张表<br>
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/tables.png)
 
 
 
