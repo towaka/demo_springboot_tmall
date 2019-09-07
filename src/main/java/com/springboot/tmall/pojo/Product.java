@@ -1,5 +1,6 @@
 package com.springboot.tmall.pojo;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,7 +18,6 @@ public class Product {
     @JoinColumn(name="cid")
     private Category category;
 
-
     private String name;
     private String subTitle;
     private float originalPrice;
@@ -27,6 +27,14 @@ public class Product {
 
     @Transient
     private ProductImage firstProductImage;
+    @Transient
+    private List<ProductImage> productSingleImages;
+    @Transient
+    private List<ProductImage> productDetailImages;
+    @Transient
+    private int reviewCount;
+    @Transient
+    private int saleCount;
 
     public int getId() {
         return id;
@@ -98,5 +106,37 @@ public class Product {
 
     public void setFirstProductImage(ProductImage firstProductImage) {
         this.firstProductImage = firstProductImage;
+    }
+
+    public List<ProductImage> getProductSingleImages() {
+        return productSingleImages;
+    }
+
+    public void setProductSingleImages(List<ProductImage> productSingleImages) {
+        this.productSingleImages = productSingleImages;
+    }
+
+    public List<ProductImage> getProductDetailImages() {
+        return productDetailImages;
+    }
+
+    public void setProductDetailImages(List<ProductImage> productDetailImages) {
+        this.productDetailImages = productDetailImages;
+    }
+
+    public int getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        this.reviewCount = reviewCount;
+    }
+
+    public int getSaleCount() {
+        return saleCount;
+    }
+
+    public void setSaleCount(int saleCount) {
+        this.saleCount = saleCount;
     }
 }

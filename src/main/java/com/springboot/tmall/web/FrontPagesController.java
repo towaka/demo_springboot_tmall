@@ -43,4 +43,14 @@ public class FrontPagesController {
         session.removeAttribute("user");
         return "redirect:home";
     }
+
+    @GetMapping(value="/product")
+    public String product(){
+        return "front/product";
+    }
+
+    @GetMapping(value="/search")
+    public String searchResult(){
+        return "front/generalSearch";
+    }
 }

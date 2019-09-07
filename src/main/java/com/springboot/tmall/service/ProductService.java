@@ -19,6 +19,9 @@ public class ProductService {
     @Autowired ProductDAO productDAO;
     @Autowired CategoryService categoryService;
     @Autowired ProductImageService productImageService;
+    @Autowired OrderItemService orderItemService;
+    @Autowired CommentService commentService;
+
 
     public void add(Product bean){
         productDAO.save(bean);
@@ -92,6 +95,31 @@ public class ProductService {
             }
             category.setProductsByRow(productsByRow);
         }
+    }
+
+    /**
+     * 统计销量要从“已经结算”的订单项里结算，还在购物车里的产品不算进销量中
+     * @param product
+     */
+    public void setSaleAndReviewNumber(Product product) {
+        int saleCount = orderItemService.getSaleCount(product);
+        product.setSaleCount(saleCount);
+
+        int reviewCount = commentService.getCount(product);
+        product.setReviewCount(reviewCount);
+
+    }
+
+    public void setSaleAndReviewNumber(List<Product> products) {
+        for (Product product : products)
+            setSaleAndReviewNumber(product);
+    }
+
+    public List<Product> search(String keyword, int start, int size) {
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(start, size, sort);
+        List<Product> products =productDAO.findByNameLike("%"+keyword+"%",pageable);
+        return products;
     }
 
 }
