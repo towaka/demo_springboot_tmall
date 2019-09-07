@@ -7,13 +7,24 @@ demo_springboot_tmall
 项目涉及9张表<br>
 ![](https://github.com/towaka/demo_springboot_tmall/blob/master/tables.png)<br>
 <br><br><br>
-表和表之间的关系<br>
+表和表之间的关系（绘图工具：https://www.processon.com ）<br>
 ![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E8%A1%A8%E5%85%B3%E7%B3%BB.png)<br>
+<br><br><br>
+
+每个表的用途<br>
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E8%A1%A8%E7%94%A8%E9%80%94.png)<br>
 <br><br><br>
 
 
 
+
 ------更新进度------
+
+2019.9.7<br>
+上传产品页的参数、详情图片、价格显示等功能<br>
+
+2019.9.6<br>
+涉及表一览<br>
 
 2019.9.5<br>
 实现前台页面普通登录和退出功能<br>
