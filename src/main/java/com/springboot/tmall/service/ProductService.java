@@ -47,9 +47,7 @@ public class ProductService {
         return new Page4Navigator<>(pageFromJPA,navigatePages);
     }
 
-    /**
-     * 以下方法遵循依赖顺序 ↓ ↓ ↓ ↓
-     */
+    //以下方法遵循依赖顺序 ↓ ↓ ↓ ↓
 
     /**
      * 遍历某个分类获得其下的产品

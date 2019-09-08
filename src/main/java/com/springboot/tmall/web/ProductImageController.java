@@ -8,6 +8,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
+import com.springboot.tmall.dao.ProductImageDAO;
+import com.springboot.tmall.pojo.OrderItem;
 import com.springboot.tmall.pojo.Product;
 import com.springboot.tmall.service.CategoryService;
 import com.springboot.tmall.service.ProductService;
@@ -23,25 +25,31 @@ import org.springframework.web.multipart.MultipartFile;
 import com.springboot.tmall.pojo.ProductImage;
 import com.springboot.tmall.service.ProductImageService;
 import com.springboot.tmall.util.ImageUtil;
- 
+
+import static com.springboot.tmall.service.ProductImageService.type_detail;
+import static com.springboot.tmall.service.ProductImageService.type_single;
+
 @RestController
 public class ProductImageController {
 	@Autowired
     ProductService productService;
-	@Autowired ProductImageService productImageService;
 	@Autowired
-    CategoryService categoryService;
+	ProductImageService productImageService;
+	@Autowired
+	CategoryService categoryService;
+	@Autowired
+	ProductImageDAO productImageDAO;
 	
 	@GetMapping("/products/{pid}/productImages")
     public List<ProductImage> list(@RequestParam("type") String type, @PathVariable("pid") int pid) throws Exception {
         Product product = productService.get(pid);
 
         //判断类型
-    	if(ProductImageService.type_single.equals(type)) {
+    	if(type_single.equals(type)) {
     		List<ProductImage> singles =  productImageService.listSingleProductImages(product);
     		return singles;
     	}
-    	else if(ProductImageService.type_detail.equals(type)) {
+    	else if(type_detail.equals(type)) {
     		List<ProductImage> details =  productImageService.listDetailProductImages(product);
     		return details;
     	}
@@ -59,7 +67,7 @@ public class ProductImageController {
     	
 		productImageService.add(bean);
 		String folder = "img/";
-		if(ProductImageService.type_single.equals(bean.getType())){
+		if(type_single.equals(bean.getType())){
 			folder +="productSingle";
 		}
 		else{
@@ -78,7 +86,7 @@ public class ProductImageController {
 			e.printStackTrace();
 		}
         
-        if(ProductImageService.type_single.equals(bean.getType())){
+        if(type_single.equals(bean.getType())){
         	String imageFolder_small= request.getServletContext().getRealPath("img/productSingle_small");
         	String imageFolder_middle= request.getServletContext().getRealPath("img/productSingle_middle");		
         	File f_small = new File(imageFolder_small, fileName);
@@ -98,7 +106,7 @@ public class ProductImageController {
 		productImageService.delete(id);
 
 		String folder = "img/";
-		if(ProductImageService.type_single.equals(bean.getType()))
+		if(type_single.equals(bean.getType()))
 			folder +="productSingle";
 		else
 			folder +="productDetail";
@@ -107,7 +115,7 @@ public class ProductImageController {
 		File file = new File(imageFolder,bean.getId()+".jpg");
 		String fileName = file.getName();
 		file.delete();
-		if(ProductImageService.type_single.equals(bean.getType())){
+		if(type_single.equals(bean.getType())){
 			String imageFolder_small= request.getServletContext().getRealPath("img/productSingle_small");
 			String imageFolder_middle= request.getServletContext().getRealPath("img/productSingle_middle");
 			File f_small = new File(imageFolder_small, fileName);
@@ -118,6 +126,5 @@ public class ProductImageController {
 
 		return null;
     }
-    
 }
 

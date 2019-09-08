@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 在做后台设计时，分类、用户、产品、属性等都有自己对应的控制层
@@ -161,8 +158,8 @@ public class FrontController {
     }
 
     /**
-     * 立即购买和添加到购物车的功能都是一样的，
-     * 添加到购物车的过程中，都是把产品id和购买数量拿到手，进行购物车页面跳转<br>
+     * 立即购买
+     * 添加到购物车的过程中，是把产品id和购买数量拿到手，进行购物车页面跳转<br>
      * 这里直接就把这部分的业务逻辑重构到
      * {@link FrontController#buyAndAddInCart(int, int, HttpSession)}方法中<br>
      * @param pid
@@ -176,6 +173,22 @@ public class FrontController {
     }
 
     /**
+     * 添加到购物车
+     * 添加到购物车的过程中，是把产品id和购买数量拿到手，进行购物车页面跳转<br>
+     * 这里直接就把这部分的业务逻辑重构到
+     * {@link FrontController#buyAndAddInCart(int, int, HttpSession)}方法中<br>
+     * @param pid
+     * @param num
+     * @param session
+     * @return
+     */
+    @GetMapping("frontaddCart")
+    public Object addCart(int pid, int num, HttpSession session) {
+        buyAndAddInCart(pid,num,session);
+        return Result.success();
+    }
+
+    /**
      * 业务行为本身就是增加订单项<br>
      * 1. 获取参数pid<br>
      * 2. 获取参数num<br>
@@ -184,6 +197,8 @@ public class FrontController {
      * 5. 返回当前订单项id<br>
      * 6. 在页面上，拿到这个订单项id，就跳转到 location.href="buy?oiid="+oiid;<br>
      * <br>
+     * <br>
+     * <br>
      * 看代码可以看出，这里需要判断当前订单里是否已经存在这个产品对应的订单项（OrderItem）<br>
      * 1. 如果存在，就增加订单项里对应产品的数量，把修改保存到数据库，并且返回订单项id方便作跳转<br>
      * 2. 如果不存在，就持久化一个新的订单项（OrderItem）对象，完善订单项信息，例如：<br>
@@ -191,7 +206,6 @@ public class FrontController {
      *  ┗ 2.2 当前订单项包含什么产品<br>
      *  ┗ 2.3 当前订单项里的产品总共多少个<br>
      *  ┗ 2.4 返回订单项id方便作跳转<br>
-     *
      * @param pid
      * @param num
      * @param session
@@ -223,5 +237,59 @@ public class FrontController {
             oiid = oi.getId();
         }
         return oiid;
+    }
+
+    /**
+     * 1.通过数组获得订单项id组，无论客户是购买一个或者多个商品都拿这个数组记录订单项id<br>
+     * 2.准备一个订单项集合<br>
+     * 3.拿到id后<br>
+     *  ┗ 3.1 将字符串转化为int类型数据<br>
+     *  ┗ 3.2 通过id取得订单项数据并放在持久化对象里<br>
+     *  ┗ 3.3 计算当前订单项里 产品当期实际价格*购买数量 得出此订单项总价<br>
+     *  ┗ 3.4 得到前面的总价后将添加进去订单项集合<br>
+     * 4.处理订单项预览图<br>
+     * 5.把订单项集合数据放在session里面<br>
+     * 6.把订单集合和total 放在map里<br>
+     * 7.用Result.success的形式返回<br>
+     * @param oiid
+     * @param session
+     * @return
+     */
+    @GetMapping("frontbuy")
+    public Object buy(String[] oiid,HttpSession session){
+        List<OrderItem> orderItems = new ArrayList<>();
+        float total = 0;
+
+        for (String strid : oiid) {
+            int id = Integer.parseInt(strid);
+            OrderItem oi= orderItemService.get(id);
+            total +=oi.getProduct().getPromotePrice()*oi.getNumber();
+            orderItems.add(oi);
+        }
+
+        productImageService.setFirstProductImagesOnOrderItems(orderItems);
+
+        session.setAttribute("ois", orderItems);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderItems", orderItems);
+        map.put("total", total);
+        return Result.success(map);
+    }
+
+    /**
+     * 1.这里第一部先从session拿到用户，这代表用户必须先要有登录行为
+     * 2.然后按照用户寻找目前“还没有结算”的订单项
+     * 3.然后给订单项填充预览图
+     * 4.返回这个订单项集合
+     * @param session
+     * @return
+     */
+    @GetMapping("frontcart")
+    public Object cart(HttpSession session) {
+        User user =(User)  session.getAttribute("user");
+        List<OrderItem> ois = orderItemService.listByUser(user);
+        productImageService.setFirstProductImagesOnOrderItems(ois);
+        return ois;
     }
 }
