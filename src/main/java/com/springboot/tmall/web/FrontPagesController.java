@@ -53,4 +53,13 @@ public class FrontPagesController {
     public String searchResult(){
         return "front/generalSearch";
     }
+
+    @GetMapping(value="/buy")
+    public String buy(){
+        return "front/buy";
+    }
+    @GetMapping(value="/cart")
+    public String cart() {
+        return "front/cart";
+    }
 }

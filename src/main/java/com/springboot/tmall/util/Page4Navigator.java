@@ -4,10 +4,14 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * Page类功能很丰富，基本满足各种需求<br/>
+ * 但是如果需要指定页码导航栏需要显示多少个页码，Page类就爱莫能助<br/>
+ * 所以就需要在Page类的基础上提供这方面的功能需求<br/>
+ * @param <T>
+ */
 public class Page4Navigator<T> {
-    //Page类功能很丰富，基本满足各种需求，
-    //但是如果需要指定页码导航栏需要显示多少个页码，Page类就爱莫能助
-    //所以就需要在Page类的基础上提供这方面的功能需求
+
     Page<T> pageFromJPA;
     //比如分页出来的超链是这样的：[7,8,9,10,11],那么navigatePages就是5
     int navigatePages;

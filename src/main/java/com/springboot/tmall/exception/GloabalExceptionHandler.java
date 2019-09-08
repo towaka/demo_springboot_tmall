@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GloabalExceptionHandler {
     /**
-     * getCause()通常会被用来和getMessage()作对比
-     * getCause()会返回造成异常的原因
-     * getMessage()则只会获得具体的异常名称
-     * 如果是以e.getCause().getMessage();的形式来返回，信息会更具体
+     * getCause()通常会被用来和getMessage()作对比<br/>
+     * getCause()会返回造成异常的原因<br/>
+     * getMessage()则只会获得具体的异常名称<br/>
+     * 如果是以e.getCause().getMessage();的形式来返回，信息会更具体<br/>
      * @param req
      * @param e
      * @return

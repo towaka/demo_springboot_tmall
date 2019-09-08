@@ -21,6 +21,7 @@
                     num = stock;
                 $(".productNumberSetting").val(num);
             });
+
             $(".decreaseNumber").click(function(){
                 var num= $(".productNumberSetting").val();
                 --num;
@@ -59,7 +60,7 @@
                     if(0==response.data.code){
                         var pid = vue.p.id;
                         var num= $(".productNumberSetting").val();
-                        var url =  "frontbuyone?pid="+pid+"&num="+num;
+                        var url =  "frontbuyInstantly?pid="+pid+"&num="+num;
                         axios.get(url).then(function(response) {
                             var oiid = response.data;
                             location.href="buy?oiid="+oiid;
@@ -212,6 +213,5 @@
         </div>
 
         <div style="clear:both"></div>
-
     </div>
 </div>

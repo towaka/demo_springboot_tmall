@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 这个是从百度抄的，原理不太懂
- * 在WIN7和WIN10环境下测试没有问题
- * LINUX环境下未测试
+ * 这个是从百度抄的，原理不太懂<br>
+ * 在WIN7和WIN10环境下测试没有问题<br>
+ * LINUX环境下未测试<br>
  */
 public class ImageUtil {
     /**

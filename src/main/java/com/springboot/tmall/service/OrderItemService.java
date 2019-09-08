@@ -4,6 +4,7 @@ import com.springboot.tmall.dao.OrderItemDAO;
 import com.springboot.tmall.pojo.Order;
 import com.springboot.tmall.pojo.OrderItem;
 import com.springboot.tmall.pojo.Product;
+import com.springboot.tmall.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,20 @@ public class OrderItemService {
 		orderItemDAO.delete(id);
 	}
 
+    public void update(OrderItem orderItem) {
+        orderItemDAO.save(orderItem);
+    }
+
     public List<OrderItem> listByOrder(Order order) {
         return orderItemDAO.findByOrderOrderByIdDesc(order);
     }
 
     public List<OrderItem> listByProduct(Product product) {
         return orderItemDAO.findByProduct(product);
+    }
+
+    public List<OrderItem> listByUser(User user) {
+        return orderItemDAO.findByUserAndOrderIsNull(user);
     }
 
 	public void fill(List<Order> orders) {

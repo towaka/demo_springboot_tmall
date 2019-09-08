@@ -33,6 +33,8 @@ public class FrontController {
     CommentService commentService;
     @Autowired
     PropertyValueService propertyValueService;
+    @Autowired
+    OrderItemService orderItemService;
  
     @GetMapping("/fronthome")
     public Object home() {
@@ -86,9 +88,9 @@ public class FrontController {
     }
 
     /**
-     * 1.处理图片
-     * 2.处理属性值
-     * 3.处理评论
+     * 1.处理图片<br>
+     * 2.处理属性值<br>
+     * 3.处理评论<br>
      * @param pid
      * @return
      */
@@ -158,4 +160,68 @@ public class FrontController {
         return ps;
     }
 
+    /**
+     * 立即购买和添加到购物车的功能都是一样的，
+     * 添加到购物车的过程中，都是把产品id和购买数量拿到手，进行购物车页面跳转<br>
+     * 这里直接就把这部分的业务逻辑重构到
+     * {@link FrontController#buyAndAddInCart(int, int, HttpSession)}方法中<br>
+     * @param pid
+     * @param num
+     * @param session
+     * @return
+     */
+    @GetMapping("frontbuyInstantly")
+    public Object buyInstantly(int pid, int num, HttpSession session) {
+        return buyAndAddInCart(pid,num,session);
+    }
+
+    /**
+     * 业务行为本身就是增加订单项<br>
+     * 1. 获取参数pid<br>
+     * 2. 获取参数num<br>
+     * 3. 根据pid获取产品对象p<br>
+     * 4. 从session中获取用户对象user<br>
+     * 5. 返回当前订单项id<br>
+     * 6. 在页面上，拿到这个订单项id，就跳转到 location.href="buy?oiid="+oiid;<br>
+     * <br>
+     * 看代码可以看出，这里需要判断当前订单里是否已经存在这个产品对应的订单项（OrderItem）<br>
+     * 1. 如果存在，就增加订单项里对应产品的数量，把修改保存到数据库，并且返回订单项id方便作跳转<br>
+     * 2. 如果不存在，就持久化一个新的订单项（OrderItem）对象，完善订单项信息，例如：<br>
+     *  ┗ 2.1 当前订单项属于哪个用户创建<br>
+     *  ┗ 2.2 当前订单项包含什么产品<br>
+     *  ┗ 2.3 当前订单项里的产品总共多少个<br>
+     *  ┗ 2.4 返回订单项id方便作跳转<br>
+     *
+     * @param pid
+     * @param num
+     * @param session
+     * @return
+     */
+    private int buyAndAddInCart(int pid, int num, HttpSession session) {
+        Product product = productService.get(pid);
+        int oiid = 0;
+
+        User user =(User)  session.getAttribute("user");
+        boolean found = false;
+        List<OrderItem> ois = orderItemService.listByUser(user);
+        for (OrderItem oi : ois) {
+            if(oi.getProduct().getId()==product.getId()){
+                oi.setNumber(oi.getNumber()+num);
+                orderItemService.update(oi);
+                found = true;
+                oiid = oi.getId();
+                break;
+            }
+        }
+
+        if(!found){
+            OrderItem oi = new OrderItem();
+            oi.setUser(user);
+            oi.setProduct(product);
+            oi.setNumber(num);
+            orderItemService.add(oi);
+            oiid = oi.getId();
+        }
+        return oiid;
+    }
 }

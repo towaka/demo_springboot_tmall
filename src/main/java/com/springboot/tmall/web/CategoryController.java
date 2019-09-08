@@ -19,8 +19,8 @@ public class CategoryController {
     @Autowired CategoryService categoryService;
 
     /**
-     * @RequestParam 用于修饰请求参数
-     * 通过注解@RequestParam可以轻松的将URL中的参数绑定到处理函数方法的变量中
+     * @RequestParam 用于修饰请求参数<br>
+     * 通过注解@RequestParam可以轻松的将URL中的参数绑定到处理函数方法的变量中<br>
      *
      * @param start
      * @param size
@@ -36,8 +36,8 @@ public class CategoryController {
     }
 
     /**
-     * 通过CategoryService 将新分类保存到数据库
-     * 但图片信息不保存到数据库，而是保存在被持久化的对象里
+     * 通过CategoryService 将新分类保存到数据库<br>
+     * 但图片信息不保存到数据库，而是保存在被持久化的对象里<br>
      *
      * @param bean
      * @param image
@@ -53,8 +53,8 @@ public class CategoryController {
     }
 
     /**
-     * 没别的，先删除数据库记录，再删除对应的图片文件
-     * 注解中的路径映射 ListCategory.html的 ajax 请求
+     * 没别的，先删除数据库记录，再删除对应的图片文件<br>
+     * 注解中的路径映射 ListCategory.html的 ajax 请求<br>
      * @param id
      * @param request
      * @return
@@ -69,12 +69,12 @@ public class CategoryController {
     }
 
     /**
-     * 接受上传图片，并保存到 img/category目录下
-     * 文件名中加入新增分类信息在数据库的id
-     * 如果目录不存在，需要创建
-     * image.transferTo 进行文件复制
-     * 调用ImageUtil的change2jpg 进行文件类型强制转换为 jpg格式
-     * 保存图片
+     * 接受上传图片，并保存到 img/category目录下<br>
+     * 文件名中加入新增分类信息在数据库的id<br>
+     * 如果目录不存在，需要创建<br>
+     * image.transferTo 进行文件复制<br>
+     * 调用ImageUtil的change2jpg 进行文件类型强制转换为 jpg格式<br>
+     * 保存图片<br>
      * @param bean
      * @param image  MultipartFile这个类一般是用来接受前台传过来的文件
      * @param request
@@ -105,8 +105,8 @@ public class CategoryController {
     }
 
     /**
-     * 使用put方式上传。
-     * 按照 REST规范，增加是 POST，修改是 PUT。
+     * 使用put方式上传。<br>
+     * 按照 REST规范，增加是 POST，修改是 PUT。<br>
      * @param bean
      * @param image
      * @param request

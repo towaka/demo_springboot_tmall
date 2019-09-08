@@ -9,9 +9,9 @@ import com.springboot.tmall.service.UserService;
 import com.springboot.tmall.util.Page4Navigator;
 
 /**
- * 一般来说只需要查询，
- * 因为用户是需要使用者自己去注册的（增加）
- * 修改用户信息也应该是用户自己完成（修改）
+ * 一般来说只需要查询<br/>
+ * 因为用户是需要使用者自己去注册的（增加）<br/>
+ * 修改用户信息也应该是用户自己完成（修改）<br/>
  */
 @RestController
 public class UserController {
