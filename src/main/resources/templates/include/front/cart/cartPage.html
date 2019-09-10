@@ -44,11 +44,12 @@
 
             $('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
                 if(deleteOrderItem){
-
                     var url = "frontdeleteOrderItem?oiid="+deleteOrderItemid;
                     axios.get(url).then(function(response){
                         if(0==response.data.code){
-                            $("tr.cartProductItemTR[oiid="+deleteOrderItemid+"]").hide();
+                            //$("tr.cartProductItemTR[oiid="+deleteOrderItemid+"]").hide();
+                            $("tr.cartProductItemTR[oiid="+deleteOrderItemid+"]").remove();
+                            calcCartSumPriceAndNumber();
                         }
                         else{
                             location.href="login";
@@ -290,7 +291,7 @@
         <div class="cartFoot">
             <img selectit="false" class="selectAllItem" src="img/site/cartNotSelected.png">
             <span>全选</span>
-            <!-- 		<a href="#">删除</a> -->
+            <a href="#">删除</a>
 
             <div class="pull-right">
                 <span>已选商品 <span class="cartSumNumber" >0</span> 件</span>

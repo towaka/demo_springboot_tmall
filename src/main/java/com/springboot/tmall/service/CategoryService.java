@@ -2,6 +2,7 @@ package com.springboot.tmall.service;
 
 import com.springboot.tmall.dao.CategoryDAO;
 import com.springboot.tmall.pojo.Category;
+import com.springboot.tmall.pojo.Order;
 import com.springboot.tmall.pojo.Product;
 import com.springboot.tmall.util.Page4Navigator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +55,11 @@ public class CategoryService {
     }
 
     /**
-     * 以下两个方法必须要加
-     * 如果不加就会产生无限递归问题（Infinite Recursion）
+     * 以下两个方法必须要加<br>
+     * 如果不加就会产生无限递归问题（Infinite Recursion）<br>
+     * 原因可以看OrderService的removeOrderFromOrderItem方法<br>
+     * {@link OrderService#removeOrderFromOrderItem(Order) }
      */
-
     public void removeCategoryFromProduct(Category category) {
         List<Product> products =category.getProducts();
         if(null!=products) {

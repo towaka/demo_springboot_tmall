@@ -4,11 +4,13 @@ import com.springboot.tmall.comparator.*;
 import com.springboot.tmall.pojo.*;
 import com.springboot.tmall.service.*;
 import com.springboot.tmall.util.Result;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -32,6 +34,8 @@ public class FrontController {
     PropertyValueService propertyValueService;
     @Autowired
     OrderItemService orderItemService;
+    @Autowired
+    OrderService orderService;
  
     @GetMapping("/fronthome")
     public Object home() {
@@ -278,10 +282,10 @@ public class FrontController {
     }
 
     /**
-     * 1.这里第一部先从session拿到用户，这代表用户必须先要有登录行为
-     * 2.然后按照用户寻找目前“还没有结算”的订单项
-     * 3.然后给订单项填充预览图
-     * 4.返回这个订单项集合
+     * 1.这里第一部先从session拿到用户，这代表用户必须先要有登录行为<br>
+     * 2.然后按照用户寻找目前“还没有结算”的订单项<br>
+     * 3.然后给订单项填充预览图<br>
+     * 4.返回这个订单项集合<br>
      * @param session
      * @return
      */
@@ -291,5 +295,112 @@ public class FrontController {
         List<OrderItem> ois = orderItemService.listByUser(user);
         productImageService.setFirstProductImagesOnOrderItems(ois);
         return ois;
+    }
+
+    /**
+     * 1.判断用户是否登录<br>
+     * 2. 获取pid和number<br>
+     * 3. 遍历出用户当前所有的未结算的订单OrderItem<br>
+     * 4. 根据pid找到匹配的OrderItem，并修改数量后更新到数据库<br>
+     * 5. 返回 Result.success()<br>
+     * @param session
+     * @param pid
+     * @param num
+     * @return
+     */
+    @GetMapping("frontchageOrderItem")
+    public Object changeOrderItem(HttpSession session,int pid,int num){
+        User user = (User) session.getAttribute("user");
+        if(null==user)
+            return Result.fail("未登录");
+
+        List<OrderItem> ois = orderItemService.listByUser(user);
+        for (OrderItem oi : ois) {
+            if(oi.getProduct().getId()==pid){
+                oi.setNumber(num);
+                orderItemService.update(oi);
+                break;
+            }
+        }
+        return Result.success();
+    }
+
+    /**
+     * 1. 判断用户是否登录<br>
+     * 2. 获取oiid<br>
+     * 3. 删除oiid对应的OrderItem数据<br>
+     * 4. 返回字符串 Result.success<br>
+     * @param session
+     * @param oiid
+     * @return
+     */
+    @GetMapping("frontdeleteOrderItem")
+    public Object deleteOrderItem(HttpSession session,int oiid){
+        User user =(User)  session.getAttribute("user");
+        if(null==user)
+            return Result.fail("未登录");
+        orderItemService.delete(oiid);
+        return Result.success();
+    }
+
+    /**
+     * 1.管理先检查是否有登录，一般来说进入这方法时用户都应该登录了的<br>
+     * 2.开始处理订单内部信息<br>
+     *  ┗ 2.1 订单号<br>
+     *  ┗ 2.2 订单创建日期<br>
+     *  ┗ 2.3 记录创建订单的用户<br>
+     *  ┗ 2.4 记录订单目前状态<br>
+     * 3.提交订单<br>
+     * 4.以Map的形式记录订单id和订单总价<br>
+     * 5.用Result返回<br>
+     *
+     * 这里ois接受数据经过的session是从{@link FrontController#buy(String[], HttpSession)}
+     * 方法过来的，订单项集合被放到了session中
+     * @param order
+     * @param session
+     * @return
+     */
+    @PostMapping("frontcreateOrder")
+    public Object createOrder(@RequestBody Order order,HttpSession session){
+        User user =(User)  session.getAttribute("user");
+        if(null==user)
+            return Result.fail("未登录");
+        String orderCode = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + RandomUtils.nextInt(10000);
+
+        order.setOrderCode(orderCode);
+        order.setCreateDate(new Date());
+        order.setUser(user);
+        order.setStatus(OrderService.waitPay);
+
+
+        List<OrderItem> ois= (List<OrderItem>)  session.getAttribute("ois");
+        float total =orderService.add(order,ois);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("oid", order.getId());
+        map.put("total", total);
+
+        return Result.success(map);
+    }
+
+
+    @GetMapping("frontpayed")
+    public Object payed(int oid) {
+        Order order = orderService.get(oid);
+        order.setStatus(OrderService.waitDelivery);
+        order.setPayDate(new Date());
+        orderService.update(order);
+        return order;
+    }
+
+
+    @GetMapping("frontbought")
+    public Object bought(HttpSession session) {
+        User user =(User)  session.getAttribute("user");
+        if(null==user)
+            return Result.fail("未登录");
+        List<Order> os= orderService.listByUserWithoutDelete(user);
+        orderService.removeOrderFromOrderItem(os);
+        return os;
     }
 }
