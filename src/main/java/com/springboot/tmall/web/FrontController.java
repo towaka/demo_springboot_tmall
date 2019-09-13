@@ -162,7 +162,8 @@ public class FrontController {
     }
 
     /**
-     * 立即购买
+     * 立即购买<br>
+     *     <br>
      * 添加到购物车的过程中，是把产品id和购买数量拿到手，进行购物车页面跳转<br>
      * 这里直接就把这部分的业务逻辑重构到
      * {@link FrontController#buyAndAddInCart(int, int, HttpSession)}方法中<br>
@@ -344,6 +345,8 @@ public class FrontController {
     }
 
     /**
+     * 创建订单<br>
+     * <br>
      * 1.管理先检查是否有登录，一般来说进入这方法时用户都应该登录了的<br>
      * 2.开始处理订单内部信息<br>
      *  ┗ 2.1 订单号<br>
@@ -383,7 +386,11 @@ public class FrontController {
         return Result.success(map);
     }
 
-
+    /**
+     * 确定已付款的订单<br>
+     * @param oid
+     * @return
+     */
     @GetMapping("frontpayed")
     public Object payed(int oid) {
         Order order = orderService.get(oid);
@@ -393,7 +400,11 @@ public class FrontController {
         return order;
     }
 
-
+    /**
+     * 确定已购买产品的订单<br>
+     * @param session
+     * @return
+     */
     @GetMapping("frontbought")
     public Object bought(HttpSession session) {
         User user =(User)  session.getAttribute("user");
@@ -402,5 +413,108 @@ public class FrontController {
         List<Order> os= orderService.listByUserWithoutDelete(user);
         orderService.removeOrderFromOrderItem(os);
         return os;
+    }
+
+    /**
+     * 确认收货<br>
+     * @param oid
+     * @return
+     */
+    @GetMapping("frontconfirmPay")
+    public Object confirmPay(int oid){
+        Order o = orderService.get(oid);
+        orderItemService.fill(o);
+        orderService.removeOrderFromOrderItem(o);
+        return o;
+    }
+
+    /**
+     * 确认收货成功
+     * @param oid
+     * @return
+     */
+    @GetMapping("frontorderConfirmed")
+    public Object orderConfirmed( int oid) {
+        Order o = orderService.get(oid);
+        o.setStatus(OrderService.waitReview);//记住要改变订单状态
+        o.setConfirmDate(new Date());
+        orderService.update(o);//及时更新到数据库
+        return Result.success();
+    }
+
+    /**
+     * 删除已交易的订单
+     * 注意，这里虽然是删除功能，可本质上是修改（update），所以注解是@PutMapping
+     * @param oid
+     * @return
+     */
+    @PutMapping("frontdeleteOrder")
+    public Object deleteOrder(int oid){
+        Order o = orderService.get(oid);
+        o.setStatus(OrderService.delete);
+        orderService.update(o);
+        return Result.success();
+    }
+
+    /**
+     * 收货成功后的评论
+     * @param oid
+     * @return
+     */
+    @GetMapping("frontcomment")
+    public Object comment(int oid) {
+        Order o = orderService.get(oid);
+        orderItemService.fill(o);
+        //因为这里会把Order对象持久化，所以要把订单项里面的订单属性去除，以免发生无限递归
+        orderService.removeOrderFromOrderItem(o);
+        //这里只对第一个订单项对应的产品进行评论，因为对多个产品进行评论的部分实在不会做- -
+        Product p = o.getOrderItems().get(0).getProduct();
+        List<Comment> comments = commentService.list(p);
+        productService.setSaleAndReviewNumber(p);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("p", p);
+        map.put("o", o);
+        map.put("comments", comments);
+
+        return Result.success(map);
+    }
+
+    /**
+     * 1.先获得订单
+     * 2.然后修改订单状态
+     * 3.订单状态更新到数据库
+     * 4.获取产品
+     * 5.对评论信息进行转义
+     * 6.检查是否登录
+     * 7.创建评论类对象
+     *  ┗ 7.1 填充评论信息
+     *  ┗ 7.2 设置评论所对应的产品
+     *  ┗ 7.3 设置评论日期
+     *  ┗ 7.4 设置评论的用户
+     * 8.将评论更新到数据库
+     * @param session
+     * @param oid
+     * @param pid
+     * @param content
+     * @return
+     */
+    @PostMapping("frontdocomment")
+    public Object doreview( HttpSession session,int oid,int pid,String content) {
+        Order o = orderService.get(oid);
+        o.setStatus(OrderService.finish);
+        orderService.update(o);
+
+        Product p = productService.get(pid);
+        content = HtmlUtils.htmlEscape(content);
+
+        User user =(User)  session.getAttribute("user");
+        Comment review = new Comment();
+        review.setContent(content);
+        review.setProduct(p);
+        review.setCreateDate(new Date());
+        review.setUser(user);
+        commentService.add(review);
+        return Result.success();
     }
 }

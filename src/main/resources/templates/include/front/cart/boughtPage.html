@@ -55,7 +55,7 @@
                 $("#deleteConfirmModal").modal('hide');
             });
 
-            $('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
+            $('#deleteConfirmModal').on('hidden.bs.modal', function (e) { //这里只要隐藏就够了，不需要删除
                 if(deleteOrder){
                     var uri = "frontdeleteOrder?oid="+deleteOrderid;
                     axios.put(uri).then(function(response){
@@ -154,7 +154,7 @@
                                 <span>待发货</span>
                             </div>
 
-                            <a v-if="o.status=='waitReview'" :href="'review?oid='+o.id">
+                            <a v-if="o.status=='waitReview'" :href="'comment?oid='+o.id">
                                 <button  class="orderListItemReview">评价</button>
                             </a>
                         </td>

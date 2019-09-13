@@ -1,3 +1,9 @@
+<!--
+首页和搜索结果页包含的是search.html
+其他页面包含的是simpleSearch.html。
+而front/generalSearch.html和search.html又不同
+前者是查询结果页面，后者是被包含的查询输入框。
+-->
 <div class th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
     <a th:href="${application.contextPath}">
         <img id="simpleLogo" class="simpleLogo" src="img/site/simpleLogo.png">

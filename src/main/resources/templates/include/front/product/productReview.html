@@ -1,22 +1,22 @@
 <div th:fragment="html">
-    <div class="productReviewDiv" v-show="showReview" >
+    <div class="productReviewDiv" v-show="showComment" >
         <div class="productReviewTopPart">
             <a  href="#nowhere" class="productReviewTopPartSelectedLink" @click="toggle2Detail">商品详情</a>
-            <a  href="#nowhere" class="selected">累计评价 <span class="productReviewTopReviewLinkNumber">{{p.reviewCount}}</span> </a>
+            <a  href="#nowhere" class="selected">累计评价 <span class="productReviewTopReviewLinkNumber">{{p.commentCount}}</span> </a>
         </div>
 
         <div class="productReviewContentPart">
-            <div class="productReviewItem" v-for="r in reviews">
+            <div class="productReviewItem" v-for="c in comments">
                 <div class="productReviewItemDesc">
                     <div class="productReviewItemContent">
-                        {{r.content }}
+                        {{c.content }}
                     </div>
                     <div class="productReviewItemDate">
-                        {{r.createDate|formatDateFilter('YYYY-MM-DD')}}
+                        {{c.createDate|formatDateFilter('YYYY-MM-DD')}}
                     </div>
                 </div>
                 <div class="productReviewItemUserInfo">
-                    {{r.user.anonymousName}}<span class="userInfoGrayPart">（匿名）</span>
+                    {{c.user.anonymousName}}<span class="userInfoGrayPart">（匿名）</span>
                 </div>
 
                 <div style="clear:both"></div>

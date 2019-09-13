@@ -86,4 +86,14 @@ public class FrontPagesController {
     public String bought(){
         return "front/bought";
     }
+
+    @GetMapping(value="/orderConfirmed")
+    public String orderConfirmed(){
+        return "front/orderConfirmed";
+    }
+
+    @GetMapping(value="/comment")
+    public String review(){
+        return "front/comment";
+    }
 }

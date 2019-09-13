@@ -8,9 +8,9 @@
                 category:null,
                 firstProductImage:null,
                 pvs:[],
-                reviews:[],
+                comments:[],
                 showDetail:true,
-                showReview:false,
+                showComment:false,
                 user:{name:'', password:''}
             };
             //ViewModel
@@ -28,7 +28,7 @@
                             var result = response.data;//下面三个数据都是从解开map集合的数据得来的
                             vue.p=result.data.product;
                             vue.pvs=result.data.pvs;
-                            vue.reviews=result.data.comments;
+                            vue.comments=result.data.comments;
 
                             vue.category = vue.p.category;
                             vue.firstProductImage = vue.p.firstProductImage;
@@ -40,11 +40,11 @@
                     },
                     toggle2Detail:function(){
                         this.showDetail=true;
-                        this.showReview=false;
+                        this.showComment=false;
                     },
                     toggle2Review:function(){
                         this.showDetail=false;
-                        this.showReview=true;
+                        this.showComment=true;
                     }
                 }
             });

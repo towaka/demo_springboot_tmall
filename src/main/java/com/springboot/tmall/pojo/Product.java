@@ -32,7 +32,7 @@ public class Product {
     @Transient
     private List<ProductImage> productDetailImages;
     @Transient
-    private int reviewCount;
+    private int commentCount;
     @Transient
     private int saleCount;
 
@@ -124,12 +124,12 @@ public class Product {
         this.productDetailImages = productDetailImages;
     }
 
-    public int getReviewCount() {
-        return reviewCount;
+    public int getCommentCount() {
+        return commentCount;
     }
 
-    public void setReviewCount(int reviewCount) {
-        this.reviewCount = reviewCount;
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 
     public int getSaleCount() {

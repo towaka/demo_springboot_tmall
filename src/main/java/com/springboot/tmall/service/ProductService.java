@@ -103,8 +103,8 @@ public class ProductService {
         int saleCount = orderItemService.getSaleCount(product);
         product.setSaleCount(saleCount);
 
-        int reviewCount = commentService.getCount(product);
-        product.setReviewCount(reviewCount);
+        int commentCount = commentService.getCount(product);
+        product.setCommentCount(commentCount);
 
     }
 
