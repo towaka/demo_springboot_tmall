@@ -4,15 +4,14 @@ demo_springboot_tmall
 
 整个过程持续了几个月时间，之前一直都只在本地测试，前端是较大难点，一边做一边学习<br>
 
-版本信息：<br>
-====
-redis <br>
+##版本信息：<br>
+###redis <br>
 1.图形化redis client: redisclient-win32.x86.1.5<br>
 2.redis server: redis-2.4.5-win32<br>
 <br>
 <br>
-shiro<br> 
-1. org.apache.shiro 1.3.2<br>      
+###shiro<br>
+1.org.apache.shiro 1.3.2<br>      
 
 
 <br><br><br>
