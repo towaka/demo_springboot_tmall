@@ -19,6 +19,9 @@ demo_springboot_tmall
 
 
 ------更新进度------<br>
+2019.9.14 <br>
+加入对shiro和redis的支持<br>
+
 2019.9.13<br>
 更正订单页操作无响应和无法评论的错误<br>
 
