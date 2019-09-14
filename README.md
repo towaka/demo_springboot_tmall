@@ -6,12 +6,12 @@ demo_springboot_tmall
 
 版本信息：
 -----
-redis 
+redis <br>
 1.图形化redis client: redisclient-win32.x86.1.5<br>
 2.redis server: redis-2.4.5-win32<br>
 <br>
 <br>
-shiro
+shiro<br>
 1.org.apache.shiro 1.3.2<br>      
 
 
