@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import com.springboot.tmall.pojo.User;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -60,9 +62,19 @@ public class LoginInterceptor implements HandlerInterceptor {
         //剩下的字符串
         String page = uri;
         //如果和数组里的某一个值相同
-        if(begingWith(page, requireLoginPages)){
+
+        /*if(begingWith(page, requireLoginPages)){
             User user = (User) session.getAttribute("user");
             if(user==null) {
+                httpServletResponse.sendRedirect("login");
+                return false;
+            }
+        }*/
+
+        //改成Subject类校验
+        if(begingWith(page,requireLoginPages)){
+            Subject subject = SecurityUtils.getSubject();
+            if(!subject.isAuthenticated()){
                 httpServletResponse.sendRedirect("login");
                 return false;
             }

@@ -5,6 +5,9 @@ import com.springboot.tmall.pojo.Category;
 import com.springboot.tmall.pojo.Property;
 import com.springboot.tmall.util.Page4Navigator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,37 +17,38 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames="properties")
 public class PropertyService {
-    @Autowired
-    PropertyDAO propertyDAO;
-    @Autowired
-    CategoryService categoryService;
 
-    public void add(Property bean){
+    @Autowired PropertyDAO propertyDAO;
+    @Autowired CategoryService categoryService;
+
+    @CacheEvict(allEntries=true)
+    public void add(Property bean) {
         propertyDAO.save(bean);
     }
 
-    public void delete(int id){
+    @CacheEvict(allEntries=true)
+    public void delete(int id) {
         propertyDAO.delete(id);
     }
 
-    public Property get(int id){
+    @Cacheable(key="'properties-one-'+ #p0")
+    public Property get(int id) {
         return propertyDAO.findOne(id);
     }
 
-    public void update(Property bean){
+    @CacheEvict(allEntries=true)
+    public void update(Property bean) {
         propertyDAO.save(bean);
     }
+    @Cacheable(key="'properties-cid-'+ #p0.id")
+    public List<Property> listByCategory(Category category){
+        return propertyDAO.findByCategory(category);
+    }
 
-    /**
-     * 因为有查询某个分类下的属性的业务需求，所以带上分类的id（cid）
-     * @param cid
-     * @param start
-     * @param size
-     * @param navigatePages
-     * @return
-     */
-    public Page4Navigator<Property> list(int cid, int start, int size, int navigatePages) {
+    @Cacheable(key="'properties-cid-'+#p0+'-page-'+#p1 + '-' + #p2 ")
+    public Page4Navigator<Property> list(int cid, int start, int size,int navigatePages) {
         Category category = categoryService.get(cid);
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -56,7 +60,4 @@ public class PropertyService {
 
     }
 
-    public List<Property> listByCategory(Category category){
-        return propertyDAO.findByCategory(category);
-    }
 }

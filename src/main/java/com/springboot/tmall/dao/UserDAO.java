@@ -6,5 +6,6 @@ import com.springboot.tmall.pojo.User;
  
 public interface UserDAO extends JpaRepository<User,Integer>{
     User findByName(String name);
-    User getByNameAndAndPassword(String name,String password);
+    User getByNameAndPassword(String name,String password);
+    User findById(int id);
 }

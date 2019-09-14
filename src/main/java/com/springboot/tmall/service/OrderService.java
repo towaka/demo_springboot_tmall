@@ -5,7 +5,11 @@ import com.springboot.tmall.pojo.Order;
 import com.springboot.tmall.pojo.OrderItem;
 import com.springboot.tmall.pojo.User;
 import com.springboot.tmall.util.Page4Navigator;
+import com.springboot.tmall.util.SpringContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
  
 @Service
+@CacheConfig(cacheNames="orders")
 public class OrderService {
     public static final String waitPay = "waitPay";
     public static final String waitDelivery = "waitDelivery";
@@ -28,6 +33,7 @@ public class OrderService {
     @Autowired OrderDAO orderDAO;
     @Autowired OrderItemService orderItemService;
 
+    @Cacheable(key="'orders-page-'+#p0+ '-' + #p1")
     public Page4Navigator<Order> list(int start, int size, int navigatePages) {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(start, size,sort);
@@ -35,43 +41,36 @@ public class OrderService {
         return new Page4Navigator<>(pageFromJPA,navigatePages);
     }
 
-    /**
-     * 本方法的用途是把订单里的订单项的订单属性设置为空<br/>
-     * <br/>
-     * 比如有个 order, 拿到它的 orderItems， 然后再把这些orderItems的order属性，设置为空。<br/>
-     * 为什么要做这个事情呢？因为SpringMVC(springboot 里内置的mvc框架是 这个东西)的 RESTFUL注解，<br/>
-     * 在把一个Order转换为json的同时，会把其对应的 orderItems 转换为 json数组，<br/>
-     * 而 orderItem对象上有 order属性，这个order属性又会被转换为json对象，<br/>
-     * 然后这个order下又有 orderItems.....就这样就会产生无穷递归，系统就会报错了。避免无限递归<br/>
-     * 注意，无穷递归的问题，只会在 对象持久化到 redis 的时候产生<br/>
-     * <br/>
-     * 注：这里方法域改成了public，因为后来在
-     * {@link com.springboot.tmall.web.FrontController#confirmPay(int)}方法里需要使用这个方法
-     * @param order
-     */
-    /*private*/ public void removeOrderFromOrderItem(Order order) {
-        List<OrderItem> orderItems= order.getOrderItems();
-        for (OrderItem orderItem : orderItems) {
-            orderItem.setOrder(null);
-        }
-    }
-
-    public void removeOrderFromOrderItem(List<Order> orders) {
-        for (Order order : orders) {
-            removeOrderFromOrderItem(order);
-        }
-    }
- 
+    @Cacheable(key="'orders-one-'+ #p0")
     public Order get(int oid) {
         return orderDAO.findOne(oid);
     }
- 
+
+    @CacheEvict(allEntries=true)
     public void update(Order bean) {
         orderDAO.save(bean);
     }
 
+    @CacheEvict(allEntries=true)
     public void add(Order bean){
         orderDAO.save(bean);
+    }
+
+    @Cacheable(key="'orders-uid-'+ #p0.id")
+    public List<Order> listByUserAndNotDelete(User user){
+        return orderDAO.findByUserAndStatusNotOrderByIdDesc(user,OrderService.delete);
+    }
+
+    /**
+     * 这个并不是直接DAO层的方法，且是用于对订单项页面数据进行操作，所以不需要往redis作缓存
+     * @param user
+     * @return
+     */
+    public List<Order> listByUserWithoutDelete(User user) {
+        OrderService orderService = SpringContextUtil.getBean(OrderService.class);
+        List<Order> orders = orderService.listByUserAndNotDelete(user);
+        orderItemService.fill(orders);
+        return orders;
     }
 
     /**
@@ -101,13 +100,31 @@ public class OrderService {
         return total;
     }
 
-    public List<Order> listByUserAndNotDelete(User user){
-        return orderDAO.findByUserAndStatusNotOrderByIdDesc(user,OrderService.delete);
+
+    /**
+     * 本方法的用途是把订单里的订单项的订单属性设置为空<br/>
+     * <br/>
+     * 比如有个 order, 拿到它的 orderItems， 然后再把这些orderItems的order属性，设置为空。<br/>
+     * 为什么要做这个事情呢？因为SpringMVC(springboot 里内置的mvc框架是 这个东西)的 RESTFUL注解，<br/>
+     * 在把一个Order转换为json的同时，会把其对应的 orderItems 转换为 json数组，<br/>
+     * 而 orderItem对象上有 order属性，这个order属性又会被转换为json对象，<br/>
+     * 然后这个order下又有 orderItems.....就这样就会产生无穷递归，系统就会报错了。避免无限递归<br/>
+     * 注意，无穷递归的问题，只会在 对象持久化到 redis 的时候产生<br/>
+     * <br/>
+     * 注：这里方法域改成了public，因为后来在
+     * {@link com.springboot.tmall.web.FrontController#confirmPay(int)}方法里需要使用这个方法
+     * @param order
+     */
+    /*private*/ public void removeOrderFromOrderItem(Order order) {
+        List<OrderItem> orderItems= order.getOrderItems();
+        for (OrderItem orderItem : orderItems) {
+            orderItem.setOrder(null);
+        }
     }
 
-    public List<Order> listByUserWithoutDelete(User user){
-        List<Order> orders = listByUserAndNotDelete(user);
-        orderItemService.fill(orders);
-        return orders;
+    public void removeOrderFromOrderItem(List<Order> orders) {
+        for (Order order : orders) {
+            removeOrderFromOrderItem(order);
+        }
     }
 }

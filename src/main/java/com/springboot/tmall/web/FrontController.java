@@ -5,6 +5,13 @@ import com.springboot.tmall.pojo.*;
 import com.springboot.tmall.service.*;
 import com.springboot.tmall.util.Result;
 import org.apache.commons.lang.math.RandomUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.subject.Subject;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
@@ -52,6 +59,7 @@ public class FrontController {
         String password = user.getPassword();
         name = HtmlUtils.htmlEscape(name);
         user.setName(name);
+
         boolean exist = userService.isExist(name);
 
         if(exist){
@@ -59,7 +67,16 @@ public class FrontController {
             return Result.fail(message);
         }
 
-        user.setPassword(password);
+        //其实就是加多一个盐变量，加密次数，和想使用的加密算法
+        //SecureRandomNumberGenerator适合用于shiro配置文件和其他切面编程配置的场景
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        int times = 2;
+        String algorithm = "md5";
+        //将算法名字，密码，盐，次数依次放进SimpleHash构造函数里
+        String encodedPassword = new SimpleHash(algorithm,password,salt,times).toString();
+
+        user.setSalt(salt);
+        user.setPassword(encodedPassword);
         userService.add(user);
         return Result.success();
     }
@@ -68,7 +85,7 @@ public class FrontController {
     public Object login(@RequestBody User userParam, HttpSession session) {
         String name =  userParam.getName();
         name = HtmlUtils.htmlEscape(name);
-
+        /*
         User user =userService.get(name,userParam.getPassword());
         if(null==user){
             String message ="账号密码错误";
@@ -78,14 +95,55 @@ public class FrontController {
             session.setAttribute("user", user);
             return Result.success();
         }
+        */
+        /*这段代码是为了把加入shiro前测试的账号的密码加盐*/
+        User userWithoutSalt = userService.getByName(name);
+        if(userWithoutSalt!=null){
+            if(userWithoutSalt.getSalt()==null) {
+                String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+                int times = 2;
+                String algorithm = "md5";
+                String originPassword = userWithoutSalt.getPassword();
+                //将算法名字，密码，盐，次数依次放进SimpleHash构造函数里
+                String encodedPassword = new SimpleHash(algorithm, originPassword, salt, times).toString();
+                userWithoutSalt.setSalt(salt);
+                userWithoutSalt.setPassword(encodedPassword);
+                userService.add(userWithoutSalt);
+            }
+        }
+        /*这段代码是为了把加入shiro前测试的账号的密码加盐*/
+
+        //改成通过shiro方式进行校验
+        Subject subject = SecurityUtils.getSubject();
+        //将帐密封装成一个 UsernamePasswordToken 对象
+        UsernamePasswordToken token = new UsernamePasswordToken(name,userParam.getPassword());
+        try{
+            //验证帐密,subject.login(token);成功了才往下执行，否则跳到catch块
+            subject.login(token);
+            User user = userService.getByName(name);
+            session.setAttribute("user", user);
+            return Result.success();
+        }catch(AuthenticationException e){
+            String info = "账号或者密码错误";
+            System.out.println(userParam.getSalt());
+            return Result.fail(info);
+        }
     }
 
     @GetMapping("frontcheckLogin")
     public Object checkLogin( HttpSession session) {
+        /*
         User user =(User)  session.getAttribute("user");
         if(null!=user)
             return Result.success();
         return Result.fail("未登录");
+        */
+        //改成Subject类校验
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.isAuthenticated())
+            return Result.success();
+        else
+            return Result.fail("未登录");
     }
 
     /**

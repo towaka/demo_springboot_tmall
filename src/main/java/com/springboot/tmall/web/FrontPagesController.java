@@ -1,5 +1,7 @@
 package com.springboot.tmall.web;
  
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -37,13 +39,21 @@ public class FrontPagesController {
     /**
      * 注意logout方法在不需要在FrontController类声明对应方法，
      * 登出操作不需要返回 json数据，只需要对session进行操作即可
+     *
+     * 2019.9.13
+     * 后面根据需要修改成用Subject类退出
      * @see FrontController
      * @param session
      * @return
      */
     @GetMapping("/frontlogout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        /*session.removeAttribute("user");*/
+        Subject subject = SecurityUtils.getSubject();
+        //如果登录了的话
+        if(subject.isAuthenticated()){
+            subject.logout();//就退出
+        }
         return "redirect:home";
     }
 

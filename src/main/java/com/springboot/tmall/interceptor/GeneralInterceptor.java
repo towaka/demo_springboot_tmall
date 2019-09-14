@@ -62,6 +62,7 @@ public class GeneralInterceptor implements HandlerInterceptor {
         * 下面三个是将会被传递到前端的数据，但可以留意到有
         * httpServletRequest.getServletContext().setAttribute 和 session.setAttribute
         * 这里面涉及thymeleaf沿袭于JSP的作用域概念
+        *
         * httpServletRequest.getServletContext().setAttribute()对应搜索栏代码中的${application.categories_below_search}"，
         * 这里是面向全局的设置，所有用户都能获得同样的跳转链接 和 获得搜索栏下的分类推荐
         *

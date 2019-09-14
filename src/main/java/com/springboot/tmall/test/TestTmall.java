@@ -1,17 +1,20 @@
 package com.springboot.tmall.test;
    
+import com.springboot.tmall.pojo.User;
+import com.springboot.tmall.service.UserService;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * 使用JUNIT测试方法
  * 使用过程中，方法不能被声明为static，也不能有方法参数
  */
 public class TestTmall {
+    UserService userService;
+
     @Test
     public void test1(){
         //准备分类测试数据：
@@ -42,5 +45,4 @@ public class TestTmall {
         }
    
     }
-   
 }
