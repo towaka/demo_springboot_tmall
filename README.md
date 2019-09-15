@@ -9,40 +9,40 @@ demo_springboot_tmall
 
 ### springboot<br>
 
-    1.springboot 1.5.9.RELEASE<br>
+    1.springboot 1.5.9.RELEASE
 
 ### redis <br>
 
-    1.redis-client: redisclient-win32.x86.1.5<br>
-    2.redis-server: redis-2.4.5-win32<br>
+    1.redis-client: redisclient-win32.x86.1.5
+    2.redis-server: redis-2.4.5-win32
 
 ### shiro<br>
 
-    1.org.apache.shiro-1.3.2<br>  
+    1.org.apache.shiro-1.3.2  
 
 ### Mysql<br>
 
-    1.MySQL-Server-5.7<br> 
-    2.MySQL-Front-6.1<br> 
-    3.MySQL-connector-java-5.1.21<br>
+    1.MySQL-Server-5.7
+    2.MySQL-Front-6.1
+    3.MySQL-connector-java-5.1.21
 
 ### elasticsearch<br>
 
-    1.elasticsearch-2.4.2<br> 
-    2.kibana-4.6.3-windows-x86<br> 
-    3.com.sun.jna-3.0.9<br>
+    1.elasticsearch-2.4.2
+    2.kibana-4.6.3-windows-x86 
+    3.com.sun.jna-3.0.9
     
 ### bootstrap<br>
-    1.bootstrap-3.3.6<br>
+    1.bootstrap-3.3.6
     
 ### vue.js<br>
-    1. vue.js-2.5.16<br>
+    1. vue.js-2.5.16
 
 ### thymeleaf<br>
-    1. thymeleaf legacyhtml5 模式支持-1.9.22<br>
+    1. thymeleaf legacyhtml5 模式支持-1.9.22
     
 ### javascript<br>
-    1.ECMAScript 5.1<br>
+    1.ECMAScript 5.1
     
 <br><br><br>
 项目涉及9张表<br>
