@@ -7,11 +7,14 @@ demo_springboot_tmall
 版本信息：
 -----
 redis <br>
+---
 1.图形化redis client: redisclient-win32.x86.1.5<br>
 2.redis server: redis-2.4.5-win32<br>
 <br>
 <br>
+
 shiro<br>
+---
 1.org.apache.shiro 1.3.2<br>      
 
 
@@ -31,6 +34,9 @@ shiro<br>
 
 
 ------更新进度------<br>
+2019.9.15 <br>
+添加elasticsearch支持 <br>
+
 2019.9.14 <br>
 加入对shiro和redis的支持<br>
 
