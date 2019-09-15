@@ -9,7 +9,7 @@ demo_springboot_tmall
 
 ### springboot<br>
 
-    1.springboot 1.5.9.RELEASE
+    1.springboot 1.5.9.RELEASE<br>
 
 ### redis <br>
 
@@ -24,12 +24,26 @@ demo_springboot_tmall
 
     1.MySQL-Server-5.7<br> 
     2.MySQL-Front-6.1<br> 
+    3.MySQL-connector-java-5.1.21<br>
 
 ### elasticsearch<br>
 
     1.elasticsearch-2.4.2<br> 
     2.kibana-4.6.3-windows-x86<br> 
+    3.com.sun.jna-3.0.9<br>
+    
+### bootstrap<br>
+    1.bootstrap-3.3.6<br>
+    
+### vue.js<br>
+    1. vue.js-2.5.16<br>
 
+### thymeleaf<br>
+    1. thymeleaf legacyhtml5 模式支持-1.9.22<br>
+    
+### javascript<br>
+    1.ECMAScript 5.1<br>
+    
 <br><br><br>
 项目涉及9张表<br>
 ![](https://github.com/towaka/demo_springboot_tmall/blob/master/tables.png)<br>
