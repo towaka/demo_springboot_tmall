@@ -5,29 +5,29 @@ demo_springboot_tmall
 整个过程持续了几个月时间，之前一直都只在本地测试，前端是较大难点，一边做一边学习<br>
 
 版本信息：
----
+===
 springboot<br>
 ---
 1.springboot 1.5.9.RELEASE
 
 redis <br>
 ---
-1.redis-client: redisclient-win32.x86.1.5<br>
-2.redis-server: redis-2.4.5-win32<br>
+    1.redis-client: redisclient-win32.x86.1.5<br>
+    2.redis-server: redis-2.4.5-win32<br>
 
 shiro<br>
 ---
-1.org.apache.shiro-1.3.2<br>  
+    1.org.apache.shiro-1.3.2<br>  
 
 Mysql<br>
 ---
-1.MySQL-Server-5.7<br> 
-2.MySQL-Front-6.1<br> 
+    1.MySQL-Server-5.7<br> 
+    2.MySQL-Front-6.1<br> 
 
 elasticsearch<br>
 ---
-1.elasticsearch-2.4.2<br> 
-2.kibana-4.6.3-windows-x86<br> 
+    1.elasticsearch-2.4.2<br> 
+    2.kibana-4.6.3-windows-x86<br> 
 
 <br><br><br>
 项目涉及9张表<br>
