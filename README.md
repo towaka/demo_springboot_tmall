@@ -1,8 +1,20 @@
 demo_springboot_tmall
 ====
-本项目预期中的架构是springboot+mysql+redis+elasticsearch,前端是javascript+vue.js+thymeleaf+bootstrap,可以从package com.how2java.tmall.web 开始看里面的控制类跟踪业务实现
+本项目预期中的架构是springboot+mysql+shiro+redis+elasticsearch,前端是javascript+vue.js+thymeleaf+bootstrap,可以从package com.how2java.tmall.web 开始看里面的控制类跟踪业务实现
 
 整个过程持续了几个月时间，之前一直都只在本地测试，前端是较大难点，一边做一边学习<br>
+
+版本信息：
+-----
+redis <br>
+1.图形化redis client: redisclient-win32.x86.1.5<br>
+2.redis server: redis-2.4.5-win32<br>
+<br>
+<br>
+shiro<br>
+1.org.apache.shiro 1.3.2<br>      
+
+
 <br><br><br>
 项目涉及9张表<br>
 ![](https://github.com/towaka/demo_springboot_tmall/blob/master/tables.png)<br>
@@ -19,6 +31,9 @@ demo_springboot_tmall
 
 
 ------更新进度------<br>
+2019.9.14 <br>
+加入对shiro和redis的支持<br>
+
 2019.9.13<br>
 更正订单页操作无响应和无法评论的错误<br>
 
