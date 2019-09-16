@@ -3,9 +3,17 @@ demo_springboot_tmall
 本项目预期中的架构是springboot+mysql+shiro+redis+elasticsearch, 前端是javascript+vue.js+thymeleaf+bootstrap, 可以从package com.springboot.tmall.web 开始看里面的控制类跟踪业务实现 , 请在java 1.8环境下运行
 
 运行前需要先启动redis，elasticsearch，kibana目录其下/bin下的bat文件，顺序如下（之后将上传相关文件）<br>
-1.redis.bat<br>
+1.redis.bat（32bit）<br>
 2.elasticsearch.bat<br>
 3.kibana.bat<br>
+
+项目打开后默认打开前台首页：<br> 
+* http://localhost:8099/springboot_tmall/home <br>
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E5%89%8D%E5%8F%B0%E9%A6%96%E9%A1%B5.jpg)<br>
+
+后台管理页面为：<br>
+* http://localhost:8099/springboot_tmall/admin_category_list<br>
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E5%90%8E%E5%8F%B0%E5%88%86%E7%B1%BB%E7%AE%A1%E7%90%86.png)<br>
 
 整个过程持续了几个月时间，之前一直都只在本地测试，前端是较大难点，一边做一边学习<br>
 
