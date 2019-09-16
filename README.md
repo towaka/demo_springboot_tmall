@@ -9,7 +9,7 @@ demo_springboot_tmall
 
 项目打开后默认打开前台首页：<br> 
 * http://localhost:8099/springboot_tmall/home <br>
-![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E5%89%8D%E5%8F%B0%E9%A6%96%E9%A1%B5.jpg)<br>
+![](https://github.com/towaka/demo_springboot_tmall/blob/master/%E5%89%8D%E5%8F%B0%E9%A6%96%E9%A1%B5.png)<br>
 
 后台管理页面为：<br>
 * http://localhost:8099/springboot_tmall/admin_category_list<br>
